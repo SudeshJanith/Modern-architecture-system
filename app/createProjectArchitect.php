@@ -8,6 +8,7 @@ class createProjectArchitect extends Model
 {
     protected $fillable = [
         'id',
+        'user_id',
         'name',
         'plan_type',
         'sqfeet',
@@ -32,9 +33,8 @@ class createProjectArchitect extends Model
         'celing_material',
         'floor_material',
         'roof_material',
-        'img'
-        
-
-
+        'img',
+        'img_1',
+        'img_2',
     ];
 }

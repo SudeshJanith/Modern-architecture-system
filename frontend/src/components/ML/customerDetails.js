@@ -574,7 +574,7 @@ export default class customerDetails extends Component {
                         
                                                 <div className="user_profile_pic-content">
 
-                                                    <img className="user_profile_pic"  src={CarouselImage03} alt=""  alt=""/>
+                                                    <img className="user_profile_pic"  src={CarouselImage03} alt="" />
                                                 </div>
                                             </div>
                         

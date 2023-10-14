@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\createProjectArchitect;
-use App\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class ArchitectCreateProjectController extends Controller
 {
@@ -38,8 +40,107 @@ class ArchitectCreateProjectController extends Controller
      */
     public function store(Request $request)
     {
-        createProjectArchitect::create([
-            'id' => request('id'),
+        $fileNameToStore = null;
+        $fileNameToStore1 = null;
+        $fileNameToStore2 = null;
+
+        if ($request->hasFile('img')) {
+            // 01. Get filename with extension
+            $fileNameWithExtension = $request->file('img')->getClientOriginalName();
+
+            // 02. Get Just File Name
+            $fileName = pathinfo($fileNameWithExtension, PATHINFO_FILENAME);
+
+            // 03. Get Extension
+            $extension = $request->file('img')->getClientOriginalExtension();
+
+            // 04. File name to Store
+            if (str_contains($fileName, '/')) {
+
+                $charcrs = array('/', ':');
+
+                $fileNameModified = str_replace($charcrs, '-', $fileName);
+                $fileNameToStore = time() . '-project-main-' . $fileNameModified .'.'.$extension;
+
+            }else {
+
+                $fileNameToStore = time() . '-project-main-' . $fileName .'.'.$extension;
+
+            }
+
+            // 05. Upload Image
+            $path = $request->file('img')->storeAs('public/projects', $fileNameToStore);
+
+            // 06. Merge Main image name to request
+        }
+
+
+        if ($request->hasFile('img_1')) {
+
+            // 01. Get filename with extension
+            $fileNameWithExtension1 = $request->file('img_1')->getClientOriginalName();
+
+            // 02. Get Just File Name
+            $fileName1 = pathinfo($fileNameWithExtension1, PATHINFO_FILENAME);
+
+            // 03. Get Extension
+            $extension1 = $request->file('img_1')->getClientOriginalExtension();
+
+            // 04. File name to Store
+            if (str_contains($fileName1, '/')) {
+
+                $charcrs = array('/', ':');
+
+                $fileNameModified1 = str_replace($charcrs, '-', $fileName1);
+                $fileNameToStore1 = time() . '-project-main-' . $fileNameModified1 .'.'.$extension1;
+
+            }else {
+
+                $fileNameToStore1 = time() . '-project-main-' . $fileName1 .'.'.$extension1;
+
+            }
+
+            // 05. Upload Image
+            $path1 = $request->file('img_1')->storeAs('public/projects', $fileNameToStore1);
+
+            // 06. Merge Main image name to request
+        }
+
+        if ($request->hasFile('img_2')) {
+
+            // 01. Get filename with extension
+            $fileNameWithExtension2 = $request->file('img_2')->getClientOriginalName();
+
+            // 02. Get Just File Name
+            $fileName2 = pathinfo($fileNameWithExtension2, PATHINFO_FILENAME);
+
+            // 03. Get Extension
+            $extension2 = $request->file('img_2')->getClientOriginalExtension();
+
+            // 04. File name to Store
+            if (str_contains($fileName, '/')) {
+
+                $charcrs = array('/', ':');
+
+                $fileNameModified2 = str_replace($charcrs, '-', $fileName2);
+                $fileNameToStore2 = time() . '-project-main-' . $fileNameModified2 .'.'.$extension2;
+
+            }else {
+
+                $fileNameToStore2 = time() . '-project-main-' . $fileName2 .'.'.$extension2;
+
+            }
+
+            // 05. Upload Image
+            $path = $request->file('img_2')->storeAs('public/projects', $fileNameToStore2);
+
+            // 06. Merge Main image name to request
+            // $request->merge(['img_2' => $fileNameToStore2]);
+        }
+
+        $newProject = createProjectArchitect::create([
+            'id' => rand(0001, 9999),
+            'user_id' => request('user_id'),
             'name' => request('name'),
             'plan_type' => request('plan_type'),
             'sqfeet' => request('sqfeet'),
@@ -64,39 +165,16 @@ class ArchitectCreateProjectController extends Controller
             'celing_material' => request('celing_material'),
             'floor_material' => request('floor_material'),
             'roof_material' => request('roof_material'),
-            'img' => request('img')
+            'img' => $fileNameToStore ?? null,
+            'img_1' => $fileNameToStore1 ?? null,
+            'img_2' => $fileNameToStore2 ?? null,
         ]);
 
-        // $newArchitectProjectCreate = new createProjectArchitect();
-        // $newArchitectProjectCreate->architect_id = $request->architect_id;
-        // $newArchitectProjectCreate->user_id = $request->user_id;
-        
-        // $newArchitectProjectCreate->plan_name = $request->plan_name;
-        // $newArchitectProjectCreate->plan_type = $request->plan_type;
-        // $newArchitectProjectCreate->Architectural_Style = $request->Architectural_Style;
-        // $newArchitectProjectCreate->no_Bed_Room_Attach = $request->no_Bed_Room_Attach;
-        // $newArchitectProjectCreate->no_Bed_Room_Non_Attach = $request->no_Bed_Room_Non_Attach;
-        // $newArchitectProjectCreate->no_Bath_Room_Attach = $request->no_Bath_Room_Attach;
-        // $newArchitectProjectCreate->no_Bath_Room_Non_Attach = $request->no_Bath_Room_Non_Attach;
-        // $newArchitectProjectCreate->no_Kitchen = $request->no_Kitchen;
-        // $newArchitectProjectCreate->no_Garage = $request->no_Garage;
-        // $newArchitectProjectCreate->no_Covered_Porch = $request->no_Covered_Porch;
-        // $newArchitectProjectCreate->no_LivingRoom = $request->no_LivingRoom;
-        // $newArchitectProjectCreate->no_GreatRoom = $request->no_GreatRoom;
-        // $newArchitectProjectCreate->no_Veranda = $request->no_Veranda;
-        // $newArchitectProjectCreate->no_MudRoom = $request->no_MudRoom;
-        // $newArchitectProjectCreate->no_Laundry = $request->no_Laundry;
-
-
-        // $newArchitectProjectCreate->no_floors = $request->no_floors;
-        // $newArchitectProjectCreate->no_rooms = $request->no_rooms;
-        // $newArchitectProjectCreate->no_doors = $request->no_doors;
-        // $newArchitectProjectCreate->no_windows = $request->no_windows;
-        // $newArchitectProjectCreate->wall_material = $request->wall_material;
-        // $newArchitectProjectCreate->celing_material = $request->celing_material;
-        // $newArchitectProjectCreate->floor_material = $request->floor_material;
-        // $newArchitectProjectCreate->roof_material = $request->roof_material;
-        // $newArchitectProjectCreate->save();
+        Log::debug("Created New Project Object");
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Project Details added successfully!',
+        ])->setStatusCode(200);
 
     }
 
@@ -190,7 +268,7 @@ class ArchitectCreateProjectController extends Controller
         // $data = createProjectArchitect::all(); 
         // return $data;
 
-        $reviews = DB::table('create_project_architects')->where('id', $id)->get();
+        $reviews = DB::table('create_project_architects')->where('projid', $id)->get();
         return $reviews;
     }
 

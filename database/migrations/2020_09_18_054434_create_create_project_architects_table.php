@@ -19,6 +19,7 @@ class CreateCreateProjectArchitectsTable extends Migration
             // $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('id');
             // $table->string('id');
+            $table->integer('user_id');
             $table->string('name');
             $table->string('plan_type');
             $table->string('sqfeet');
@@ -43,10 +44,10 @@ class CreateCreateProjectArchitectsTable extends Migration
             $table->string('celing_material');
             $table->string('floor_material');
             $table->string('roof_material');
-            $table->string('img');
+            $table->string('img')->nullable();
+            $table->string('img_1')->nullable();
+            $table->string('img_2')->nullable();
             $table->timestamps();
-            $table->foreign('id')->references('projid')->on('create_project_architects')->onDelete('cascade')->onUpdate('cascade');
-
         });
     }
 

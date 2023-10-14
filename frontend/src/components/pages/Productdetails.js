@@ -5,6 +5,8 @@ import prodct1 from '../css/img/prodct/product1.jpg';
 import prodct2 from '../css/img/prodct/product2.jpg';
 import prodct3 from '../css/img/prodct/product3.jpg';
 import CarouselImage03 from '../css/img/Carousel/carousel_img_3.png';
+import {connect} from 'react-redux';
+
 import '../css/custom.css';
 // import '../css/smoothproducts.css';
 import '../css/custom.css';
@@ -14,7 +16,9 @@ class Productdetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name:props.name,
             review: [],
+            imgUrl: 'http://127.0.0.1:8000/storage/projects/',
             project_details: [],
         }
     }
@@ -55,28 +59,34 @@ class Productdetails extends Component {
             <div className="row py-2 px-6 show active">
                     <div className="col-md-11 mx-auto">
                         <div className="">
+                        {
+                            project_details.map(prject_img=>{
+                                return(
+                                    <div className='row my-3'>
+                                        <div className="col">
+                                            <div className="sp-wrap">
+                                                <a href=""><img className="carousel-img5 rounded" src={this.state.imgUrl+prject_img.img} alt="" /></a>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="sp-wrap">
+                                                <a href=""><img className="carousel-img5 rounded" src={this.state.imgUrl+prject_img.img_1} alt="" /></a>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="sp-wrap">
+                                                <a href=""><img className="carousel-img5 rounded" src={this.state.imgUrl+prject_img.img_2} alt="" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                             
-                            <div className="row">
-                                <div class="col-4">
-                                    <div className="sp-wrap">
-                                        <a href=""><img className="carousel-img5" src={prodct1} alt="" /></a>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div className="sp-wrap">
-                                        <a href=""><img className="carousel-img5" src={prodct2} alt="" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-4">
-                                    <div className="sp-wrap">
-                                        <a href=""><img className="carousel-img5" src={prodct3} alt="" /></a>
-                                    </div>
-                                </div>
-                            </div>
                             
                         </div>
 
-                        <div className="col">
+                        <div className="row mt-3">
                         
 
                             <div className="product-detail-left">
@@ -85,9 +95,9 @@ class Productdetails extends Component {
                                             <img className="img2" src={CarouselImage03} alt="" /><br/>
                                         </div>
                                         
-                                        <div className="media-body mb-5 text-white">
+                                        <div className="media-body mb-5 text-white d-flex justify-content-center items-center">
                                             <div>
-                                                <h4>{this.state.name}</h4></div>
+                                                <h4 className='text-capitalize'>{this.state.name}</h4></div>
                                             {/* <h4 className="mt-0 mb-0">Name:{this.state.username}</h4> */}
                                             <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>Sri Lanka</p>
                                         </div>
@@ -96,14 +106,18 @@ class Productdetails extends Component {
                                                     project_details.map(project_details=>{
                                                         return(
                                                                 <tr>
-                                                                <th scope="col"><div className="media-body mb-5 text-white">
-                                            <div><h4>Architect Name :{project_details.name}</h4></div></div></th>
+                                                                    {/* <th scope="col"><div className="media-body mb-5 text-white">
+                                                                        <div><h4>Architect Name :{this.state.name}</h4></div></div>
+                                                                    </th> */}
+                                                                    <th scope="col"><div className="media-body mb-5 text-white">
+                                                                        <div><h4>Plan Name :<br/>{project_details.name}</h4></div></div>
+                                                                    </th>
                                                                 </tr>
                                                         )
                                                     })
                                                 }
                             </div>
-                            <div className="product-detail-right">
+                            <div className="product-detail-right mt-5">
 
                                 {/* <h3>Modern Farmhouse 	Marquis-1780 <br></h3> */}
                                 <h5><b>Open-concept great room with vaulted ceilings</b></h5>
@@ -244,4 +258,12 @@ class Productdetails extends Component {
     }
 }
 
-export default Productdetails
+// export default Productdetails
+const mapStateToProps = state => {
+    return {
+        id:state.auth.user.id,
+        name:state.auth.user.name,
+    };
+}
+
+export default connect(mapStateToProps, null)(Productdetails);
